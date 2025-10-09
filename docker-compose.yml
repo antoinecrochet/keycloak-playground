@@ -1,0 +1,27 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:5173"
+    extra_hosts:
+      - "auth.localhost:${KEYCLOAK_IP:-host-gateway}"
+    environment:
+      - VITE_KEYCLOAK_URL=${KEYCLOAK_URL}
+      - VITE_KEYCLOAK_REALM=${KEYCLOAK_REALM}
+      - VITE_KEYCLOAK_CLIENT_ID=${KEYCLOAK_FRONT_CLIENT_ID}
+      - VITE_API_BASE_URL=${BACKEND_URL}
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT}:3000"
+    extra_hosts:
+      - "auth.localhost:${KEYCLOAK_IP:-host-gateway}"
+    environment:
+      - KEYCLOAK_URL=${KEYCLOAK_URL}
+      - KEYCLOAK_REALM=${KEYCLOAK_REALM}
+      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_BACK_CLIENT_ID}
+      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_BACK_CLIENT_SECRET}
+      - FRONTEND_URL=http://localhost:${FRONTEND_PORT}
