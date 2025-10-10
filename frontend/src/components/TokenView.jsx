@@ -1,5 +1,6 @@
 import React from 'react'
 import { decodeJwt } from '../utils/decodeJwt'
+import Button from './Button'
 
 export default function TokenView({ label, token }){
   const decoded = decodeJwt(token)
@@ -8,7 +9,7 @@ export default function TokenView({ label, token }){
       <div className="flex items-center justify-between mb-2">
         <h4 className="font-semibold">{label}</h4>
         <div className="space-x-2">
-          <button className="px-2 py-1 border rounded text-sm" onClick={()=>navigator.clipboard.writeText(token||'')}>Copy</button>
+          <Button onClick={()=>navigator.clipboard.writeText(token||'')}>Copy</Button>
         </div>
       </div>
       <pre className="text-xs bg-slate-50 p-3 rounded h-20 overflow-auto">{token || '—'}</pre>

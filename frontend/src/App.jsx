@@ -3,6 +3,7 @@ import Keycloak from 'keycloak-js';
 import TokenView from './components/TokenView'
 import UserInfo from './components/UserInfo'
 import UmaPlayground from './components/UmaPlayground'
+import Button from './components/Button'
 
 const KEYCLOAK_URL = import.meta.env.VITE_KEYCLOAK_URL || 'http://auth.localhost'
 const KEYCLOAK_REALM = import.meta.env.VITE_KEYCLOAK_REALM || 'test'
@@ -50,9 +51,9 @@ export default function App() {
           </div>
         </div>
         <div className="mt-4 flex gap-2">
-          <button onClick={handleLogin} className="px-3 py-1 bg-indigo-600 text-white rounded">Login</button>
-          <button onClick={handleLogout} className="px-3 py-1 border rounded">Logout</button>
-          <button onClick={() => kc && kc.updateToken(5).then(() => setKc({ ...kc })).catch(() => { })} className="px-3 py-1 border rounded">Refresh token</button>
+          <Button onClick={handleLogin}>Login</Button>
+          <Button onClick={handleLogout} variant="secondary">Logout</Button>
+          <Button onClick={() => kc && kc.updateToken(5)} variant="secondary">Refresh Token</Button>
         </div>
       </header>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from './Button'
 
 export default function UmaPlayground({ kc, apiBase }){
   const [reply, setReply] = useState(null)
@@ -30,9 +31,9 @@ export default function UmaPlayground({ kc, apiBase }){
       </div>
 
       <div className="space-x-2 mb-4">
-        <button className="px-3 py-1 bg-indigo-600 text-white rounded" onClick={callResource} disabled={loading}>
+        <Button onClick={callResource} disabled={loading}>
           {loading ? 'Calling…' : 'Call Protected Resource'}
-        </button>
+        </Button>
       </div>
 
       <div>
