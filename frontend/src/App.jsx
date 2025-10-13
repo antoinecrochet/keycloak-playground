@@ -102,33 +102,5 @@ export default function App() {
         </main>
       </div>
     </Router>
-    // <div className="min-h-screen p-6 bg-gray-100">
-    //   <header className="max-w-5xl mx-auto mb-6">
-    //     <div className="flex items-center justify-between">
-    //       <h1 className="text-2xl font-bold">Keycloak UMA Dashboard</h1>
-    //       <div>
-    //         <span className={'px-3 py-1 rounded text-sm ' + (authenticated ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}>
-    //           {authenticated ? 'Authenticated' : 'Not authenticated'}
-    //         </span>
-    //       </div>
-    //     </div>
-    //     <div className="mt-4 flex gap-2">
-    //       <Button onClick={handleLogin}>Login</Button>
-    //       <Button onClick={handleLogout} variant="secondary">Logout</Button>
-    //       <Button onClick={() => kc && kc.updateToken(5)} variant="secondary">Refresh Token</Button>
-    //     </div>
-    //   </header>
-
-    //   <main className="max-w-5xl mx-auto space-y-6">
-    //     <div className="grid grid-cols-2 gap-4">
-    //       <TokenView label="Access Token" token={kc?.token} />
-    //       <TokenView label="ID Token" token={kc?.idToken} />
-    //     </div>
-
-    //     <UserInfo info={userInfo} />
-
-    //     <UmaPlayground kc={kc} apiBase={API_BASE} />
-    //   </main>
-    // </div>
   )
 }
