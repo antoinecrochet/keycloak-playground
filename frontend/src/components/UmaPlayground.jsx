@@ -37,7 +37,7 @@ export default function UmaPlayground({ kc, apiBase }) {
   return (
     <div className="p-4 bg-white shadow rounded">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="font-semibold">UMA Playground</h4>
+        <h4 className="font-semibold">User-Managed Access Playground</h4>
         <div className="text-sm text-slate-500">Backend handles ticket/RPT</div>
       </div>
 

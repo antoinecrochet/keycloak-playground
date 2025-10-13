@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Keycloak from 'keycloak-js';
-import TokenView from './components/TokenView'
-import UserInfo from './components/UserInfo'
-import UmaPlayground from './components/UmaPlayground'
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom'
+
+import Home from './pages/Home'
+import UserInfoPage from './pages/UserInfoPage'
+import UmaPlaygroundPage from './pages/UmaPlaygroundPage'
 import Button from './components/Button'
 
 const KEYCLOAK_URL = import.meta.env.VITE_KEYCLOAK_URL || 'http://auth.localhost'
@@ -40,33 +42,93 @@ export default function App() {
   async function handleLogout() { kc?.logout() }
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <header className="max-w-5xl mx-auto mb-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Keycloak UMA Dashboard</h1>
-          <div>
-            <span className={'px-3 py-1 rounded text-sm ' + (authenticated ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}>
+    <Router>
+      <div className="min-h-screen p-6 bg-gray-100">
+        <header className="max-w-5xl mx-auto mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold">Keycloak Playground</h1>
+            <span className={`px-3 py-1 rounded text-sm ${authenticated ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
               {authenticated ? 'Authenticated' : 'Not authenticated'}
             </span>
           </div>
-        </div>
-        <div className="mt-4 flex gap-2">
-          <Button onClick={handleLogin}>Login</Button>
-          <Button onClick={handleLogout} variant="secondary">Logout</Button>
-          <Button onClick={() => kc && kc.updateToken(5)} variant="secondary">Refresh Token</Button>
-        </div>
-      </header>
 
-      <main className="max-w-5xl mx-auto space-y-6">
-        <div className="grid grid-cols-2 gap-4">
-          <TokenView label="Access Token" token={kc?.token} />
-          <TokenView label="ID Token" token={kc?.idToken} />
-        </div>
+          <div className="flex items-center justify-between border-b pb-2">
+            <nav className="flex gap-4">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
+                }
+              >
+                Tokens
+              </NavLink>
+              <NavLink
+                to="/userinfo"
+                className={({ isActive }) =>
+                  `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
+                }
+              >
+                User Info
+              </NavLink>
+              <NavLink
+                to="/uma"
+                className={({ isActive }) =>
+                  `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
+                }
+              >
+                UMA Playground
+              </NavLink>
+            </nav>
 
-        <UserInfo info={userInfo} />
+            <div className="flex gap-2">
+              {!authenticated && <Button onClick={() => kc?.login()}>Login</Button>}
+              {authenticated && (
+                <>
+                  <Button onClick={() => kc?.logout()}>Logout</Button>
+                  <Button variant="secondary" onClick={() => kc?.updateToken(5)}>Refresh Token</Button>
+                </>
+              )}
+            </div>
+          </div>
+        </header>
 
-        <UmaPlayground kc={kc} apiBase={API_BASE} />
-      </main>
-    </div>
+        <main className="max-w-5xl mx-auto space-y-6">
+          <Routes>
+            <Route path="/" element={<Home kc={kc} />} />
+            <Route path="/userinfo" element={<UserInfoPage userInfo={userInfo} />} />
+            <Route path="/uma" element={<UmaPlaygroundPage kc={kc} apiBase={API_BASE} />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+    // <div className="min-h-screen p-6 bg-gray-100">
+    //   <header className="max-w-5xl mx-auto mb-6">
+    //     <div className="flex items-center justify-between">
+    //       <h1 className="text-2xl font-bold">Keycloak UMA Dashboard</h1>
+    //       <div>
+    //         <span className={'px-3 py-1 rounded text-sm ' + (authenticated ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}>
+    //           {authenticated ? 'Authenticated' : 'Not authenticated'}
+    //         </span>
+    //       </div>
+    //     </div>
+    //     <div className="mt-4 flex gap-2">
+    //       <Button onClick={handleLogin}>Login</Button>
+    //       <Button onClick={handleLogout} variant="secondary">Logout</Button>
+    //       <Button onClick={() => kc && kc.updateToken(5)} variant="secondary">Refresh Token</Button>
+    //     </div>
+    //   </header>
+
+    //   <main className="max-w-5xl mx-auto space-y-6">
+    //     <div className="grid grid-cols-2 gap-4">
+    //       <TokenView label="Access Token" token={kc?.token} />
+    //       <TokenView label="ID Token" token={kc?.idToken} />
+    //     </div>
+
+    //     <UserInfo info={userInfo} />
+
+    //     <UmaPlayground kc={kc} apiBase={API_BASE} />
+    //   </main>
+    // </div>
   )
 }
