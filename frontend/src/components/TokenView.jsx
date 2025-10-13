@@ -12,7 +12,7 @@ export default function TokenView({ label, token }){
           <Button onClick={()=>navigator.clipboard.writeText(token||'')}>Copy</Button>
         </div>
       </div>
-      <pre className="text-xs bg-slate-50 p-3 rounded h-20 overflow-auto">{token || '—'}</pre>
+      <pre className="text-xs bg-slate-50 p-3 rounded overflow-auto">{token || '—'}</pre>
       <div className="mt-3">
         <h5 className="font-medium">Decoded</h5>
         <pre className="text-xs bg-slate-50 p-3 rounded h-48 overflow-auto">{decoded ? JSON.stringify(decoded, null, 2) : '—'}</pre>
