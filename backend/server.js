@@ -127,15 +127,32 @@ app.get('/api/resource/:id', async (req, res) => {
     const ticket = await getKeycloakTicket(resourceId, ['view']);
     const rpt = await exchangeTicketForRpt(ticket);
 
+    if (!rpt) {
+      return res.status(403).json({
+        error: 'rpt_failed',
+        error_description: 'Access denied: RPT could not be obtained'
+      });
+    }
+
     log('RPT received:', rpt);
 
-    // 4️⃣ Return dummy response
     return res.status(200).json({
       resource: resourceId,
     });
+
   } catch (err) {
-    log('Access error', err);
-    return res.status(500).json({ error: 'rpt_failed', error_description: err.message });
+    if (err.message?.includes('Cannot obtain RPT') || err.message?.includes('ticket')) {
+      return res.status(403).json({
+        error: 'rpt_failed',
+        error_description: err.message
+      });
+    }
+
+    log('Internal error', err);
+    return res.status(500).json({
+      error: 'server_error',
+      error_description: err.message
+    });
   }
 });
 
