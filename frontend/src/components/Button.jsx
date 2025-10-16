@@ -7,11 +7,8 @@ export default function Button({ children, variant = 'primary', ...props }) {
     secondary: "border border-gray-300 text-gray-700 shadow-sm hover:bg-gray-100",
     danger: "bg-red-600 text-white shadow-md hover:bg-red-700",
   };
-        //   <button onClick={handleLogin} className="px-3 py-1 bg-indigo-600 text-white rounded">Login</button>
-        //   <button onClick={handleLogout} className="px-3 py-1 border rounded">Logout</button>
-        //   <button onClick={() => kc && kc.updateToken(5).then(() => setKc({ ...kc })).catch(() => { })} className="px-3 py-1 border rounded">Refresh token</button>
   return (
-    <button {...props} className={`${base} ${variants[variant]}`}>
+    <button {...props} className={`${base} ${variants[variant]} ${props.className}`}>
       {children}
     </button>
   );
