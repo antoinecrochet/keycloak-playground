@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-do
 import Home from './pages/Home'
 import UserInfoPage from './pages/UserInfoPage'
 import UmaPlaygroundPage from './pages/UmaPlaygroundPage'
+import RolesPermissionsPage from './pages/RolesPermissionsPage'
 import Button from './components/Button'
 
 const KEYCLOAK_URL = import.meta.env.VITE_KEYCLOAK_URL || 'http://auth.localhost'
@@ -72,6 +73,14 @@ export default function App() {
                 User Info
               </NavLink>
               <NavLink
+                to="/roles"
+                className={({ isActive }) =>
+                  `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
+                }
+              >
+                Roles & Permissions
+              </NavLink>
+              <NavLink
                 to="/uma"
                 className={({ isActive }) =>
                   `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
@@ -97,6 +106,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home kc={kc} />} />
             <Route path="/userinfo" element={<UserInfoPage userInfo={userInfo} />} />
+            <Route path="/roles" element={<RolesPermissionsPage kc={kc} />} />
             <Route path="/uma" element={<UmaPlaygroundPage kc={kc} apiBase={API_BASE} />} />
           </Routes>
         </main>
