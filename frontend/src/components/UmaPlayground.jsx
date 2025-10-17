@@ -4,7 +4,8 @@ import Button from './Button'
 export default function UmaPlayground({ kc, apiBase }) {
   const [reply, setReply] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [showHelp, setShowHelp] = useState(false)
+  const [showInfoModal, setShowInfoModal] = useState(false)
+  const [showSetupModal, setShowSetupModal] = useState(false)
 
   const [method, setMethod] = useState('GET')
   const [url, setUrl] = useState(`${apiBase}/api/resource/prod-doc-1`)
@@ -43,13 +44,12 @@ export default function UmaPlayground({ kc, apiBase }) {
           <h4 className="font-semibold">User-Managed Access Playground</h4>
           <div className="text-sm text-slate-500">Backend handles ticket/RPT</div>
         </div>
-        <Button
-          onClick={() => setShowHelp(true)}
-          variant="secondary"
-          className="text-xs"
-        >
-          📘 What is UMA?
-        </Button>
+        <div className="flex gap-2 text-sm text-slate-500">
+          <Button onClick={() => setShowInfoModal(true)} variant="secondary"
+            className="text-xs">What is UMA?</Button>
+          <Button onClick={() => setShowSetupModal(true)} variant="secondary"
+            className="text-xs">How to configure UMA</Button>
+        </div>
       </div>
 
       <div className="space-x-2 mb-4 flex items-center">
@@ -83,16 +83,16 @@ export default function UmaPlayground({ kc, apiBase }) {
         </pre>
       </div>
 
-      {showHelp && (
+      {showInfoModal && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"  // ⬅ fixed + z-50
-          onClick={() => setShowHelp(false)}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowInfoModal(false)}
         >
           <div
             className="bg-white p-6 rounded shadow-lg max-w-lg w-full relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-semibold mb-3">ℹ️ What is UMA?</h3>
+            <h3 className="text-lg font-semibold mb-3">What is UMA?</h3>
             <p className="text-sm text-gray-700 mb-4">
               UMA (User-Managed Access) is an OAuth2 extension that delegates authorization
               decisions to an external authorization server (here: Keycloak).
@@ -133,11 +133,36 @@ export default function UmaPlayground({ kc, apiBase }) {
 
             <div className="text-right">
               <button
-                onClick={() => setShowHelp(false)}
+                onClick={() => setShowInfoModal(false)}
                 className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSetupModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setShowSetupModal(false)}
+        >
+          <div
+            className="bg-white rounded shadow-lg max-w-lg w-full p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-3">How to configure UMA in Keycloak</h3>
+            <ol className="list-decimal list-inside text-sm mb-4 space-y-1">
+              <li>Go to <strong>Clients</strong> in your realm and select your resource server.</li>
+              <li>Enable <strong>Authorization</strong> in the “Settings” tab.</li>
+              <li>Go to the <strong>Authorization</strong> tab.</li>
+              <li>Create <strong>Resources</strong> and associate scopes.</li>
+              <li>Define <strong>Policies</strong> (e.g., role-based, group-based, etc.).</li>
+              <li>Create <strong>Permissions</strong> to link resources, scopes, and policies.</li>
+            </ol>
+            <div className="mt-4 text-right">
+              <Button onClick={() => setShowSetupModal(false)}>Close</Button>
             </div>
           </div>
         </div>
