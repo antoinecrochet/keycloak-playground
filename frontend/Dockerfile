@@ -2,15 +2,16 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --production
 COPY . .
 RUN npm run build
 
-# ---- Dev stage (optionnel si tu veux du hot reload) ----
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 5173
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# ---- Production stage ----
+FROM nginx:alpine
+LABEL maintainer="Antoine Crochet <antoinecrochet.contact+github@gmail.com>"
+LABEL org.opencontainers.image.source=https://github.com/antoinecrochet/keycloak-playground
+LABEL org.opencontainers.image.description="A playground application to explore Keycloak features like UMA, Authorization Services, and more."
+LABEL org.opencontainers.image.licenses=MIT
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
