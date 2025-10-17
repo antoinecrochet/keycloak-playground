@@ -3,3 +3,8 @@
 @tailwind utilities;
 
 html,body,#app { height: 100%; }
+
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
