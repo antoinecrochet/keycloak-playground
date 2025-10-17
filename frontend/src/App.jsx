@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import UserInfoPage from './pages/UserInfoPage'
 import UmaPlaygroundPage from './pages/UmaPlaygroundPage'
 import RolesPermissionsPage from './pages/RolesPermissionsPage'
+import AboutPage from './pages/AboutPage'
 import Button from './components/Button'
 
 const KEYCLOAK_URL = import.meta.env.VITE_KEYCLOAK_URL || 'http://auth.localhost'
@@ -88,6 +89,14 @@ export default function App() {
               >
                 UMA Playground
               </NavLink>
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  `pb-1 ${isActive ? 'border-b-2 border-indigo-600 text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'}`
+                }
+              >
+                About
+              </NavLink>
             </nav>
 
             <div className="flex gap-2">
@@ -108,6 +117,7 @@ export default function App() {
             <Route path="/userinfo" element={<UserInfoPage userInfo={userInfo} />} />
             <Route path="/roles" element={<RolesPermissionsPage kc={kc} />} />
             <Route path="/uma" element={<UmaPlaygroundPage kc={kc} apiBase={API_BASE} />} />
+            <Route path="/about" element={<AboutPage />} />
           </Routes>
         </main>
       </div>
