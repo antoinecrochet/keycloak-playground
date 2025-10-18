@@ -40,9 +40,6 @@ export default function App() {
       })
   }, [])
 
-  async function handleLogin() { kc?.login() }
-  async function handleLogout() { kc?.logout() }
-
   return (
     <Router>
       <div className="min-h-screen p-6 bg-gray-100">

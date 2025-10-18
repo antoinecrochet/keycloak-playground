@@ -11,7 +11,7 @@ const KEYCLOAK_URL = process.env.KEYCLOAK_URL || "http://auth.localhost";
 const KEYCLOAK_REALM = process.env.KEYCLOAK_REALM || "test";
 const CLIENT_ID = process.env.KEYCLOAK_CLIENT_ID || "rs-server";
 const CLIENT_SECRET = process.env.KEYCLOAK_CLIENT_SECRET || "your-secret";
-const FRONTEND_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:3000';
+const FRONTEND_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // CORS
 app.use((req, res, next) => {
@@ -22,7 +22,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// JWKS pour vérification token Keycloak
 const JWKS = createRemoteJWKSet(
   new URL(`${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs`)
 );
@@ -31,7 +30,6 @@ function log(...args) { console.log('[backend]', ...args); }
 
 // ==================== Helpers ====================
 
-// Vérifie un token JWT (user ou RPT)
 async function verifyToken(token) {
   try {
     const { payload } = await jwtVerify(token, JWKS, {
@@ -44,7 +42,6 @@ async function verifyToken(token) {
   }
 }
 
-// Cache du PAT pour éviter de requêter Keycloak à chaque appel
 let cachedPAT = null;
 let patExpiry = 0;
 
@@ -69,13 +66,13 @@ async function getPAT() {
     throw new Error('Cannot obtain PAT');
   }
   cachedPAT = data.access_token;
-  patExpiry = now + (data.expires_in - 10) * 1000; // expiry minus 10s de sécurité
+  patExpiry = now + (data.expires_in - 10) * 1000;
   log('PAT obtained, expires in', data.expires_in, 'seconds');
   return cachedPAT;
 }
 
 async function getKeycloakTicket(resourceId = 'prod-doc-1', scopes = ['view']) {
-  const pat = await getPAT(); // utilise PAT du backend
+  const pat = await getPAT();
   log('Requesting UMA ticket from Keycloak with backend PAT...');
 
   const resp = await fetch(`${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/authz/protection/permission`, {
@@ -92,7 +89,6 @@ async function getKeycloakTicket(resourceId = 'prod-doc-1', scopes = ['view']) {
   return data.ticket;
 }
 
-// Échange ticket UMA → RPT avec PAT
 async function exchangeTicketForRpt(ticket) {
   const pat = await getPAT();
   log('Exchanging ticket for RPT...');
